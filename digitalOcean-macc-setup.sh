@@ -98,56 +98,34 @@ echo -e "${RED}$0 ======================================${NC}"
 
 function 2_masternode_IPv6networkset(){
     tmpIPv6=$(curl -s6 icanhazip.com)
-    setIPv6=`echo ${tmpIPv6} | cut -d':' -f -4`
+    setIPv6=${tmpIPv6::-1}
     for (( i = 1; i <= $SET_NUM; i++)); do  #NODEIPv6에 포트셋팅  /etc/network/interfaces에서 쓰일 변수 생성
-      mn_IPv6[$i]=${setIPv6}::$i            #mn_IPv6[1~6]에   IPv6:1 ~ 6 값 생성
+      mn_IPv6[$i]=${setIPv6}$i            #mn_IPv6[1~6]에   IPv6:1 ~ 6 값 생성
       echo "mn_IPv6[$i] : ${mn_IPv6[$i]}"
     done
 
-echo -e "${RED}$0 ======================================${NC}"
-echo -e "${RED}$0 ======= Make a IPv6 networkset =======${NC}"
-echo -e "${RED}$0 ======================================${NC}"
 }
 
 #IPv6는 read로 전달하도록 해야할듯.
 
 function 3_add_IPv6() {
-#ipv6가 추가되어 있는지를 어떻게 알 수 있을까... 어떻게 추가할까...
-#if [[ ~~~ != ~~~~ ]];
 
-  #if [[ ${check_ipv6_tmp} -eq 1 ]]; then   #11번 라인 삭제, Auto를 삭제함.
-    #statements
-  sed -i '11d' /etc/network/interfaces
-
-#IPv6 추가하기. 맨끝에 변하는 자리 하나는 빼놓고 넣어주기.
+for (( i = 1; i <= $SET_NUM; i++)); do  #NODEIPv6에 포트셋팅  /etc/network/interfaces에서 쓰일 변수 생성
   cat << EOF >> /etc/network/interfaces
-iface ens3 inet6 static
-address ${mn_IPv6[1]}
-netmask 64
+iface eth0 inet6 static
+${mn_IPv6[$i]}
+netmask64
 EOF
 
-for (( i = 2; i <= $SET_NUM; i++)); do  #NODEIPv6에 포트셋팅  /etc/network/interfaces에서 쓰일 변수 생성
-  cat << EOF >> /etc/network/interfaces
-up /sbin/ip -6 addr add dev ens3 ${mn_IPv6[$i]}
-EOF
+ip -6 addr add ${mn_IPv6[$i]}/64 dev eth0
+
 done
-#일단은 네트워크는 추가해놓는게 좋을듯해서 추가함.
-
-#네트워크 재부팅
-systemctl restart networking.service
-sleep 3
 
 #추가했던 네트워크들이 확인되는지 체크하기
-ip addr show ens3
+ip addr show eth0
 sleep 3
-
 #grep -n ^ /etc/network/interfaces
 
-#else
-#  echo -e "${RED}$0 ======================================${NC}"
-#  echo -e "${RED}$0 ===You have to rebuild ipv6 setting===${NC}"
-#  echo -e "${RED}$0 ======================================${NC}"
-#fi
 }
 
 function edit_macc_addnode() {            #addnode 할때 다른 명령어 같이 실행되니깐 addnode 기능만 따로~
