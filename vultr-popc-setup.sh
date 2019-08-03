@@ -3,18 +3,18 @@
 #COIN_NAME='safeinsure'
 #COIN_DAEMON="${COIN_NAME}d"
 #COIN_CLI="${COIN_NAME}-cli"
-COIN_NAME='mastercorecoin'
+COIN_NAME='pointofpubliccoin'
 TMP_FOLDER=$(mktemp -d)
-CONFIG_FILE='mastercorecoin.conf'
-CONFIGFOLDER='/root/.mastercorecoincore'
-COIN_DAEMON='mastercorecoind'
-COIN_CLI='mastercorecoin-cli'
+CONFIG_FILE='pointofpubliccoin.conf'
+CONFIGFOLDER='/root/.pointofpubliccoincore'
+COIN_DAEMON='pointofpubliccoind'
+COIN_CLI='pointofpubliccoin-cli'
 COIN_PATH='/usr/bin/'
 #COIN_TGZ='https://cdmcoin.org/condominium_ubuntu.zip'
 #COIN_ZIP=$(echo $COIN_TGZ | awk -F'/' '{print $NF}')
 #COIN_EXPLORER='http://chain.cdmcoin.org'
-COIN_PORT=29871
-RPC_PORT=29872
+COIN_PORT=39871
+RPC_PORT=39872
 SET_NUM=6
 
 BLUE="\033[0;34m"
@@ -26,7 +26,7 @@ GREEN="\033[0;32m"
 NC='\033[0m'
 MAG='\e[1;35m'
 
-#ipv6 전역변수 설정
+#ipv6값 전역변수 설정
 tmpIPv6=$(curl -s6 icanhazip.com)
 setIPv6=`echo ${tmpIPv6} | cut -d':' -f -4`
 for (( i = 1; i <= $SET_NUM; i++)); do  #NODEIPv6에 포트셋팅  /etc/network/interfaces에서 쓰일 변수 생성
@@ -34,12 +34,8 @@ for (( i = 1; i <= $SET_NUM; i++)); do  #NODEIPv6에 포트셋팅  /etc/network/
   echo "mn_IPv6[$i] : ${mn_IPv6[$i]}"
 done
 
-##IPv4와 IPv6를 인수로 넣어주기.
-##IPv6는 read로 전달하도록 해야할듯.
-#inputIPv4=$1
-#inputIPv6=$2
 
-function 0_bulid_stop_MACC() {
+function 0_bulid_stop_popc() {
   wget -qO- https://github.com/mastercorecoin/mastercorecoin/releases/download/1.0.0.0/macc_mn_installer.sh | bash
   sleep 10
 
@@ -47,11 +43,9 @@ echo -e "${RED}$0 ======================================${NC}"
 echo -e "${RED}$0 =======     bulid_stop_MACC    =======${NC}"
 echo -e "${RED}$0 ======================================${NC}"
 
-}
+}       #popc는 직접설치요망
 
-
-#프라이빗키 생성 / 배열값 mn_Privkey[1 ~ 6]
-function 1_macc_Genprivkey() {
+function 1_popc_Genprivkey() {
 
 for (( i = 1; i <= $SET_NUM; i++)); do
   mn_Privkey[$i]="$($COIN_PATH$COIN_CLI masternode genkey)"
@@ -61,7 +55,8 @@ done
 echo -e "${RED}$0 ======================================${NC}"
 echo -e "${RED}$0 ============ Make a Genkey ===========${NC}"
 echo -e "${RED}$0 ======================================${NC}"
-}
+
+}       #프라이빗키 생성 / 배열값 mn_Privkey[1 ~ 6]
 
 function 2_Vultr_IPv6networkset() {
 
@@ -105,11 +100,21 @@ sleep 3
 #grep -n ^ /etc/network/interfaces
 }
 
-function edit_macc_addnode() {            #addnode 할때 다른 명령어 같이 실행되니깐 addnode 기능만 따로~
+function edit_popc_addnode() {            #addnode 할때 다른 명령어 같이 실행되니깐 addnode 기능만 따로~
 #복사전... 이 부분 POPC는 달라져야 함...################
 ##고정값 추가 및 addnode
 ##아직 정지안했음.
 cat << EOF >> $CONFIGFOLDER/$CONFIG_FILE
+addnode=45.63.121.56
+addnode=45.77.183.241
+addnode=13.125.225.96
+addnode=165.22.207.53
+addnode=45.32.251.4
+addnode=134.209.234.33
+addnode=206.189.34.232
+addnode=159.89.207.106
+addnode=209.97.163.191
+addnode=178.128.220.27
 addnode=45.32.36.18
 addnode=202.182.101.162
 addnode=149.28.31.156
@@ -120,43 +125,22 @@ addnode=45.77.183.241
 addnode=45.76.52.233
 addnode=198.13.37.49
 addnode=45.77.29.239
-addnode=128.199.171.192
-addnode=45.77.21.70
-addnode=198.13.38.119
-addnode=45.32.39.247
-addnode=95.179.154.9
-addnode=157.230.123.11
-addnode=104.248.141.211
-addnode=178.128.54.41
-addnode=204.48.26.40
-addnode=207.154.201.240
-addnode=159.89.151.147
-addnode=167.99.206.80
-addnode=138.68.103.119
-addnode=134.209.225.16
-addnode=159.65.139.78
-addnode=68.183.64.70
-addnode=104.248.157.119:34652
-addnode=104.248.39.113:29871
-addnode=112.162.233.135:50514
-addnode=113.10.36.11:60418
-addnode=128.199.155.59:55256
-addnode=128.199.167.13:29871
-addnode=128.199.171.192:37988
-addnode=128.199.175.9:42000
-addnode=128.199.251.99:47266
-addnode=134.209.108.46:60394
-addnode=134.209.108.51:49510
-addnode=134.209.225.16:58492
-addnode=134.209.233.131:52286
-addnode=134.209.240.245:51216
-addnode=134.209.246.108:42116
 EOF
 
 for (( i = 1; i <= $SET_NUM; i++)); do
 
 sed -i '15,$d' $CONFIGFOLDER$i/$CONFIG_FILE           #addnode 초기화 #$CONFIGFOLDER/$CONFIG_FILE 15line부터 끝까지 삭제
 cat << EOF >> $CONFIGFOLDER$i/$CONFIG_FILE
+addnode=45.63.121.56
+addnode=45.77.183.241
+addnode=13.125.225.96
+addnode=165.22.207.53
+addnode=45.32.251.4
+addnode=134.209.234.33
+addnode=206.189.34.232
+addnode=159.89.207.106
+addnode=209.97.163.191
+addnode=178.128.220.27
 addnode=45.32.36.18
 addnode=202.182.101.162
 addnode=149.28.31.156
@@ -167,37 +151,6 @@ addnode=45.77.183.241
 addnode=45.76.52.233
 addnode=198.13.37.49
 addnode=45.77.29.239
-addnode=128.199.171.192
-addnode=45.77.21.70
-addnode=198.13.38.119
-addnode=45.32.39.247
-addnode=95.179.154.9
-addnode=157.230.123.11
-addnode=104.248.141.211
-addnode=178.128.54.41
-addnode=204.48.26.40
-addnode=207.154.201.240
-addnode=159.89.151.147
-addnode=167.99.206.80
-addnode=138.68.103.119
-addnode=134.209.225.16
-addnode=159.65.139.78
-addnode=68.183.64.70
-addnode=104.248.157.119:34652
-addnode=104.248.39.113:29871
-addnode=112.162.233.135:50514
-addnode=113.10.36.11:60418
-addnode=128.199.155.59:55256
-addnode=128.199.167.13:29871
-addnode=128.199.171.192:37988
-addnode=128.199.175.9:42000
-addnode=128.199.251.99:47266
-addnode=134.209.108.46:60394
-addnode=134.209.108.51:49510
-addnode=134.209.225.16:58492
-addnode=134.209.233.131:52286
-addnode=134.209.240.245:51216
-addnode=134.209.246.108:42116
 EOF
 done
 
@@ -209,15 +162,17 @@ echo -e "${RED}$0 ======== addnode work is done ========${NC}"
 echo -e "${RED}$0 ======================================${NC}"
 }
 
-function 3_macc_node_setting(){
+function 3_popc_node_setting(){
 
 #if [[ ${check_ipv6_tmp} -eq 1 ]]; then
 
 $COIN_PATH$COIN_CLI stop   #cli stop
 sleep 5
 
-sed -i '3d'  $CONFIGFOLDER/$CONFIG_FILE
-sed -i '11alogtimestamps=1\nmaxconnections=256\nport=29871' $CONFIGFOLDER/$CONFIG_FILE
+#sed -i '3d' $CONFIGFOLDER $CONFIGFOLDER
+#sed -i '9d' $CONFIGFOLDER $CONFIGFOLDER
+#sed -i '11d' $CONFIGFOLDER $CONFIGFOLDER
+#sed -i '12aport=39871' $CONFIGFOLDER $CONFIGFOLDER
 
 for (( i = 1; i <= $SET_NUM; i++)); do
   #cp -r -p .mastercorecoincore/ .mastercorecoincore$i #디렉토리 문제 해결
@@ -229,20 +184,21 @@ done
 for (( i = 1; i <= $SET_NUM; i++)); do
   sed -i "1s/rpcuser=/rpcuser=$i/"  $CONFIGFOLDER$i/$CONFIG_FILE
   sed -i "2s/rpcpassword=/rpcpassword=$i/"  $CONFIGFOLDER$i/$CONFIG_FILE
-  sed -i "2arpcport=$RPC_PORT$i"  $CONFIGFOLDER$i/$CONFIG_FILE
+  sed -i "2arpcport=$RPC_PORT$i"  $CONFIGFOLDER$i/$CONFIG_FILE    #line 3
   sed -i "5s/listen=1/listen=0/"  $CONFIGFOLDER$i/$CONFIG_FILE
-  sed -i "8cbind=[${mn_IPv6[$i]}]"  $CONFIGFOLDER$i/$CONFIG_FILE
-  sed -i "9cexternalip=[${mn_IPv6[$i]}]:$COIN_PORT"  $CONFIGFOLDER$i/$CONFIG_FILE
+  sed -i "10cbind=[${mn_IPv6[$i]}]"  $CONFIGFOLDER$i/$CONFIG_FILE
+  sed -i "11cexternalip=[${mn_IPv6[$i]}]:$COIN_PORT"  $CONFIGFOLDER$i/$CONFIG_FILE
   #젠키 같다 붙이기.
-  sed -i "12cmasternodeprivkey=${mn_Privkey[$i]}" $CONFIGFOLDER$i/$CONFIG_FILE
-  sed -i '10d' $CONFIGFOLDER$i/$CONFIG_FILE
+  sed -i "13cmasternodeprivkey=${mn_Privkey[$i]}" $CONFIGFOLDER$i/$CONFIG_FILE
+
 done
-  echo "successfull macc node setting"
+  echo "successfull popc node setting"
+
 
  #grep -n ^ /root/.mastercorecoincore1/mastercorecoin.conf
 }
 
-function 4_macc_node_starting(){
+function 4_popc_node_starting(){
 
 #if [[ ${check_ipv6_tmp} -eq 1 ]]; then
 
@@ -295,11 +251,11 @@ function 6_pull_privkey_ipv6() {
 
 
 #Check_IPv4_IPv6
-0_bulid_stop_MACC
-1_macc_Genprivkey
-2_Vultr_IPv6networkset
-3_macc_node_setting
-4_macc_node_starting
-edit_macc_addnode
+#0_bulid_stop_popc                 #직접 설치하도록
+1_popc_Genprivkey
+2_digitalOcean_IPv6networkset     #이미 ipv6가 만들어진 상태라면 2번 함수 주석처리후 수행할 것
+3_popc_node_setting
+4_popc_node_starting
+edit_popc_addnode
 5_check_getblockcount
 6_pull_privkey_ipv6

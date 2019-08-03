@@ -26,50 +26,20 @@ GREEN="\033[0;32m"
 NC='\033[0m'
 MAG='\e[1;35m'
 
+#network ipv6 변수값 설정
+tmpIPv6=$(curl -s6 icanhazip.com)
+setIPv6=${tmpIPv6::-1}
+for (( i = 1; i <= $SET_NUM; i++)); do  #NODEIPv6에 포트셋팅  /etc/network/interfaces에서 쓰일 변수 생성
+  mn_IPv6[$i]=${setIPv6}$i            #mn_IPv6[1~6]에   IPv6:1 ~ 6 값 생성
+  echo "mn_IPv6[$i] : ${mn_IPv6[$i]}"
+done
+
+
+
 ##IPv4와 IPv6를 인수로 넣어주기.
 ##IPv6는 read로 전달하도록 해야할듯.
 #inputIPv4=$1
 #inputIPv6=$2
-
-function Check_IPv4_IPv6() {
-
-NODEIPv4=$(curl -s4 icanhazip.com)
-sleep 1
-echo -e "${RED} Check this IPv4 : ${inputIPv4}${NC}"
-
-#혹시 IPv4를 잘못붙여넣지 않았는지 확인.
-if [[ $NODEIPv4 != $inputIPv4 ]]; then
-   echo -e "${RED} IPv4 must match. You check this IPv4 : ${inputIPv4}${NC}"
-
-   exit 1
-fi
-
-NODEIPv6=$(curl -s6 icanhazip.com)
-
-sleep 1
-echo -e "${RED} Check this IPv6 : ${inputIPv6}${NC}"
-
-#체크만 해보기.
-cutNODEIPv6=${NODEIPv6:0:18}
-cutinputIPv6=${inputIPv6:0:18}
-
-if [[ $cutNODEIPv6 != $cutinputIPv6 ]]; then
-   echo -e "${RED} IPv6 must match. You check this IPv6 : ${inputIPv6}${NC}"
-   exit 1
-fi
-
-echo -e "${RED}*** Input IPv4 : $inputIPv4 *** "
-echo -e "${RED}*** Input IPv6 : $inputIPv6 *** "
-
-#  check_ipv6_tmp=1
-
-  sleep 3
-
-echo -e "${RED}$0 ======================================${NC}"
-echo -e "${RED}$0 =======     Check_IPv4_IPv6    =======${NC}"
-echo -e "${RED}$0 ======================================${NC}"
-
-}
 
 function 0_bulid_stop_MACC() {
   wget -qO- https://github.com/mastercorecoin/mastercorecoin/releases/download/1.0.0.0/macc_mn_installer.sh | bash
@@ -83,7 +53,7 @@ echo -e "${RED}$0 ======================================${NC}"
 
 
 #프라이빗키 생성 / 배열값 mn_Privkey[1 ~ 6]
-function 1_masternode_Genprivkey() {
+function 1_macc_Genprivkey() {
 
 for (( i = 1; i <= $SET_NUM; i++)); do
   mn_Privkey[$i]="$($COIN_PATH$COIN_CLI masternode genkey)"
@@ -93,22 +63,13 @@ done
 echo -e "${RED}$0 ======================================${NC}"
 echo -e "${RED}$0 ============ Make a Genkey ===========${NC}"
 echo -e "${RED}$0 ======================================${NC}"
-}
 
+}       #프라이빗키 생성 / 배열값 mn_Privkey[1 ~ 6]
 
-function 2_masternode_IPv6networkset(){
-    tmpIPv6=$(curl -s6 icanhazip.com)
-    setIPv6=${tmpIPv6::-1}
-    for (( i = 1; i <= $SET_NUM; i++)); do  #NODEIPv6에 포트셋팅  /etc/network/interfaces에서 쓰일 변수 생성
-      mn_IPv6[$i]=${setIPv6}$i            #mn_IPv6[1~6]에   IPv6:1 ~ 6 값 생성
-      echo "mn_IPv6[$i] : ${mn_IPv6[$i]}"
-    done
+function 2_digitalOcean_IPv6networkset() {
 
-}
-
-#IPv6는 read로 전달하도록 해야할듯.
-
-function 3_add_IPv6() {
+if [[ $(cat /etc/network/interfaces | wc -l) -le 10  ]]; then
+  #statements
 
 for (( i = 1; i <= $SET_NUM; i++)); do  #NODEIPv6에 포트셋팅  /etc/network/interfaces에서 쓰일 변수 생성
   cat << EOF >> /etc/network/interfaces
@@ -120,7 +81,17 @@ EOF
 ip -6 addr add ${mn_IPv6[$i]}/64 dev eth0
 
 done
+echo -e "${GREEN} ==============================================${NC}"
+echo -e "${GREEN} ======== IPv6 network setting is done ========${NC}"
+echo -e "${GREEN} ==============================================${NC}"
 
+else
+
+  echo -e "${RED} =================================================${NC}"
+  echo -e "${RED} ======== Already network setting is done ========${NC}"
+  echo -e "${RED} =================================================${NC}"
+
+fi
 #추가했던 네트워크들이 확인되는지 체크하기
 ip addr show eth0
 sleep 3
@@ -232,7 +203,7 @@ echo -e "${RED}$0 ======== addnode work is done ========${NC}"
 echo -e "${RED}$0 ======================================${NC}"
 }
 
-function 4_macc_node_setting(){
+function 3_macc_node_setting(){
 
 #if [[ ${check_ipv6_tmp} -eq 1 ]]; then
 
@@ -271,7 +242,7 @@ done
  #grep -n ^ /root/.mastercorecoincore1/mastercorecoin.conf
 }
 
-function 5_macc_node_starting(){
+function 4_macc_node_starting(){
 
 #if [[ ${check_ipv6_tmp} -eq 1 ]]; then
 
@@ -293,7 +264,7 @@ done
 
 }
 
-function 6_check_getblockcount() {
+function 5_check_getblockcount() {
 sleep 15
 
 for (( i = 1; i <= $SET_NUM; i++)); do
@@ -301,7 +272,7 @@ for (( i = 1; i <= $SET_NUM; i++)); do
 done
 }
 
-function 7_pull_privkey_ipv6() {
+function 6_pull_privkey_ipv6() {
    tmpIPv4=$(curl -s4 icanhazip.com)
 
    mn_key[0]=$(sed -n '/masternodeprivkey/p' $CONFIGFOLDER/$CONFIG_FILE)
@@ -325,11 +296,10 @@ function 7_pull_privkey_ipv6() {
 
 #Check_IPv4_IPv6
 0_bulid_stop_MACC
-1_masternode_Genprivkey
-2_masternode_IPv6networkset
-3_add_IPv6
-4_macc_node_setting
+1_macc_Genprivkey
+2_digitalOcean_IPv6networkset
+3_macc_node_setting
+4_macc_node_starting
 edit_macc_addnode
-5_macc_node_starting
-6_check_getblockcount
-7_pull_privkey_ipv6
+5_check_getblockcount
+6_pull_privkey_ipv6
