@@ -36,12 +36,21 @@ done
 
 
 function 0_bulid_stop_popc() {
-  wget -qO- https://github.com/mastercorecoin/mastercorecoin/releases/download/1.0.0.0/macc_mn_installer.sh | bash
-  sleep 10
+git clone https://github.com/pointofpublic/popc-mn
 
-echo -e "${RED}$0 ======================================${NC}"
-echo -e "${RED}$0 =======     bulid_stop_MACC    =======${NC}"
-echo -e "${RED}$0 ======================================${NC}"
+#!/usr/bin/expect
+
+spawn git clone https://github.com/pointofpublic/popc-mn
+expect -re "Username"
+sleep 1
+send "pointofpublic\r"
+
+expect -re "Password"
+sleep 1
+send "popc9799!\r"
+interact
+
+#/root/popc-mn/./popc_mn_installer.sh
 
 }       #popc는 직접설치요망
 
@@ -253,7 +262,7 @@ function 6_pull_privkey_ipv6() {
 #Check_IPv4_IPv6
 #0_bulid_stop_popc                 #직접 설치하도록
 1_popc_Genprivkey
-2_digitalOcean_IPv6networkset     #이미 ipv6가 만들어진 상태라면 2번 함수 주석처리후 수행할 것
+2_Vultr_IPv6networkset     #이미 ipv6가 만들어진 상태라면 2번 함수 주석처리후 수행할 것
 3_popc_node_setting
 4_popc_node_starting
 edit_popc_addnode
