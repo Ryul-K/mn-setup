@@ -26,10 +26,14 @@ GREEN="\033[0;32m"
 NC='\033[0m'
 MAG='\e[1;35m'
 
-##IPv4와 IPv6를 인수로 넣어주기.
-##IPv6는 read로 전달하도록 해야할듯.
-#inputIPv4=$1
-#inputIPv6=$2
+#ipv6값 전역변수 설정
+tmpIPv6=$(curl -s6 icanhazip.com)
+setIPv6=${tmpIPv6::-1}
+for (( i = 1; i <= $SET_NUM; i++)); do  #NODEIPv6에 포트셋팅  /etc/network/interfaces에서 쓰일 변수 생성
+  mn_IPv6[$i]=${setIPv6}$i            #mn_IPv6[1~6]에   IPv6:1 ~ 6 값 생성
+  echo "mn_IPv6[$i] : ${mn_IPv6[$i]}"
+done
+
 
 function 0_bulid_stop_popc() {
   wget -qO- https://github.com/mastercorecoin/mastercorecoin/releases/download/1.0.0.0/macc_mn_installer.sh | bash
@@ -51,13 +55,6 @@ done
 echo -e "${RED}$0 ======================================${NC}"
 echo -e "${RED}$0 ============ Make a Genkey ===========${NC}"
 echo -e "${RED}$0 ======================================${NC}"
-
-tmpIPv6=$(curl -s6 icanhazip.com)
-setIPv6=${tmpIPv6::-1}
-for (( i = 1; i <= $SET_NUM; i++)); do  #NODEIPv6에 포트셋팅  /etc/network/interfaces에서 쓰일 변수 생성
-  mn_IPv6[$i]=${setIPv6}$i            #mn_IPv6[1~6]에   IPv6:1 ~ 6 값 생성
-  echo "mn_IPv6[$i] : ${mn_IPv6[$i]}"
-done
 
 }       #프라이빗키 생성 / 배열값 mn_Privkey[1 ~ 6]
 
@@ -163,10 +160,10 @@ function 3_popc_node_setting(){
 $COIN_PATH$COIN_CLI stop   #cli stop
 sleep 5
 
-#sed -i '3d' $CONFIGFOLDER $CONFIGFOLDER
-#sed -i '9d' $CONFIGFOLDER $CONFIGFOLDER
-#sed -i '11d' $CONFIGFOLDER $CONFIGFOLDER
-#sed -i '12aport=39871' $CONFIGFOLDER $CONFIGFOLDER
+sed -i '3d' $CONFIGFOLDER $CONFIGFOLDER
+sed -i '9d' $CONFIGFOLDER $CONFIGFOLDER
+sed -i '11d' $CONFIGFOLDER $CONFIGFOLDER
+sed -i '12aport=39871' $CONFIGFOLDER $CONFIGFOLDER
 
 for (( i = 1; i <= $SET_NUM; i++)); do
   #cp -r -p .mastercorecoincore/ .mastercorecoincore$i #디렉토리 문제 해결
