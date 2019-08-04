@@ -160,10 +160,10 @@ function 3_popc_node_setting(){
 $COIN_PATH$COIN_CLI stop   #cli stop
 sleep 5
 
-sed -i '3d' $CONFIGFOLDER $CONFIGFOLDER
-sed -i '9d' $CONFIGFOLDER $CONFIGFOLDER
-sed -i '11d' $CONFIGFOLDER $CONFIGFOLDER
-sed -i '12aport=39871' $CONFIGFOLDER $CONFIGFOLDER
+sed -i '3d' $CONFIGFOLDER/$CONFIG_FILE
+sed -i '9d' $CONFIGFOLDER/$CONFIG_FILE
+sed -i '11d' $CONFIGFOLDER/$CONFIG_FILE
+sed -i '12aport=39871' $CONFIGFOLDER/$CONFIG_FILE
 
 for (( i = 1; i <= $SET_NUM; i++)); do
   #cp -r -p .mastercorecoincore/ .mastercorecoincore$i #디렉토리 문제 해결
@@ -246,7 +246,7 @@ function 6_pull_privkey_ipv6() {
 1_popc_Genprivkey
 2_digitalOcean_IPv6networkset     #이미 ipv6가 만들어진 상태라면 2번 함수 주석처리후 수행할 것
 3_popc_node_setting
-4_popc_node_starting
 edit_popc_addnode
+4_popc_node_starting
 5_check_getblockcount
 6_pull_privkey_ipv6

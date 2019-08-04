@@ -178,10 +178,10 @@ function 3_popc_node_setting(){
 $COIN_PATH$COIN_CLI stop   #cli stop
 sleep 5
 
-sed -i '3d' $CONFIGFOLDER $CONFIGFOLDER
-sed -i '9d' $CONFIGFOLDER $CONFIGFOLDER
-sed -i '11d' $CONFIGFOLDER $CONFIGFOLDER
-sed -i '12aport=39871' $CONFIGFOLDER $CONFIGFOLDER
+sed -i '3d' $CONFIGFOLDER/$CONFIG_FILE
+sed -i '9d' $CONFIGFOLDER/$CONFIG_FILE
+sed -i '11d' $CONFIGFOLDER/$CONFIG_FILE
+sed -i '12aport=39871' $CONFIGFOLDER/$CONFIG_FILE
 
 for (( i = 1; i <= $SET_NUM; i++)); do
   #cp -r -p .mastercorecoincore/ .mastercorecoincore$i #디렉토리 문제 해결
