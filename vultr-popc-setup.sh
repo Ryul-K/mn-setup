@@ -264,7 +264,7 @@ function 6_pull_privkey_ipv6() {
 1_popc_Genprivkey
 2_Vultr_IPv6networkset     #이미 ipv6가 만들어진 상태라면 2번 함수 주석처리후 수행할 것
 3_popc_node_setting
-4_popc_node_starting
 edit_popc_addnode
+4_popc_node_starting
 5_check_getblockcount
 6_pull_privkey_ipv6

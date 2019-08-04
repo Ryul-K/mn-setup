@@ -299,7 +299,7 @@ function 6_pull_privkey_ipv6() {
 1_macc_Genprivkey
 2_Vultr_IPv6networkset
 3_macc_node_setting
-4_macc_node_starting
 edit_macc_addnode
+4_macc_node_starting
 5_check_getblockcount
 6_pull_privkey_ipv6
