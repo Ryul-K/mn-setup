@@ -15,7 +15,7 @@ COIN_PATH='/usr/bin/'
 #COIN_EXPLORER='http://chain.cdmcoin.org'
 COIN_PORT=39871
 RPC_PORT=39872
-SET_NUM=6
+SET_NUM=9
 
 BLUE="\033[0;34m"
 YELLOW="\033[0;33m"
