@@ -134,6 +134,21 @@ addnode=45.77.183.241
 addnode=45.76.52.233
 addnode=198.13.37.49
 addnode=45.77.29.239
+addnode=178.128.220.27
+addnode=206.189.34.232
+addnode=159.89.207.106
+addnode=209.97.163.191
+addnode=165.22.52.92
+addnode=95.179.222.210
+addnode=149.248.52.201
+addnode=45.77.128.111
+addnode=155.138.144.47
+addnode=167.179.112.60
+addnode=167.71.213.122
+addnode=128.199.219.191
+addnode=13.125.225.96
+addnode=134.209.234.33
+
 EOF
 
 for (( i = 1; i <= $SET_NUM; i++)); do
@@ -160,6 +175,21 @@ addnode=45.77.183.241
 addnode=45.76.52.233
 addnode=198.13.37.49
 addnode=45.77.29.239
+addnode=178.128.220.27
+addnode=206.189.34.232
+addnode=159.89.207.106
+addnode=209.97.163.191
+addnode=165.22.52.92
+addnode=95.179.222.210
+addnode=149.248.52.201
+addnode=45.77.128.111
+addnode=155.138.144.47
+addnode=167.179.112.60
+addnode=167.71.213.122
+addnode=128.199.219.191
+addnode=13.125.225.96
+addnode=134.209.234.33
+
 EOF
 done
 
