@@ -295,7 +295,7 @@ function 6_pull_privkey_ipv6() {
 
 
 #Check_IPv4_IPv6
-0_bulid_stop_MACC
+#0_bulid_stop_MACC
 1_macc_Genprivkey
 2_digitalOcean_IPv6networkset
 3_macc_node_setting
