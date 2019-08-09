@@ -28,11 +28,13 @@ MAG='\e[1;35m'
 
 #network ipv6 변수값 설정
 tmpIPv6=$(hostname -I)
-setIPv6=`${tmpIPv6} | cut -d" " -f3`
+asd=`echo "${tmpIPv6}" | cut -d " " -f 3`
+setIPv6=${asd::-1}
 for (( i = 1; i <= $SET_NUM; i++)); do  #NODEIPv6에 포트셋팅  /etc/network/interfaces에서 쓰일 변수 생성
   mn_IPv6[$i]=${setIPv6}$i            #mn_IPv6[1~6]에   IPv6:1 ~ 6 값 생성
   echo "mn_IPv6[$i] : ${mn_IPv6[$i]}"
 done
+
 
 
 
