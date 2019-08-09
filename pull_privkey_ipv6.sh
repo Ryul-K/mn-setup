@@ -15,7 +15,7 @@ COIN_PATH='/usr/bin/'
 #COIN_EXPLORER='http://chain.cdmcoin.org'
 COIN_PORT=29871
 RPC_PORT=29872
-SET_NUM=9
+SET_NUM=7
 POPC_CONFIG_FILE='pointofpubliccoin.conf'
 POPC_CONFIGFOLDER='/root/.pointofpubliccoincore'
 

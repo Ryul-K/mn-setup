@@ -15,7 +15,7 @@ COIN_PATH='/usr/bin/'
 #COIN_EXPLORER='http://chain.cdmcoin.org'
 COIN_PORT=29871
 RPC_PORT=29872
-SET_NUM=9
+SET_NUM=7
 
 BLUE="\033[0;34m"
 YELLOW="\033[0;33m"
@@ -246,7 +246,7 @@ function 4_macc_node_starting(){
 
 #if [[ ${check_ipv6_tmp} -eq 1 ]]; then
 
-$COIN_PATH$COIN_DAEMON -datadir=$CONFIGFOLDER -conf=$CONFIGFOLDER/$CONFIG_FILE #reindex로 시작해야 하는지...
+$COIN_PATH$COIN_DAEMON -datadir=$CONFIGFOLDER -conf=$CONFIGFOLDER/$CONFIG_FILE -reindex #reindex로 시작해야 하는지...
 sleep 1
 
 for (( i = 1; i <= $SET_NUM; i++)); do
