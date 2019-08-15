@@ -240,14 +240,14 @@ done
 function 4_popc_node_starting(){
 
 #if [[ ${check_ipv6_tmp} -eq 1 ]]; then
-
+sleep 5
 $COIN_PATH$COIN_DAEMON -datadir=$CONFIGFOLDER -conf=$CONFIGFOLDER/$CONFIG_FILE -reindex #reindex로 시작해야 하는지...
-sleep 1
+sleep 3
 
 for (( i = 1; i <= $SET_NUM; i++)); do
 
 $COIN_PATH$COIN_DAEMON -datadir=$CONFIGFOLDER$i -conf=$CONFIGFOLDER$i/$CONFIG_FILE
-
+sleep 3
 done
 
 #else
