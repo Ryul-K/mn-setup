@@ -260,7 +260,7 @@ done
 }
 
 function 5_check_getblockcount() {
-sleep 25
+sleep 35
 
 for (( i = 1; i <= $SET_NUM; i++)); do
   $COIN_PATH$COIN_CLI -datadir=$CONFIGFOLDER$i/ -conf=$CONFIGFOLDER$i/$CONFIG_FILE getblockcount

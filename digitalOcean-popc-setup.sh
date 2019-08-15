@@ -242,10 +242,11 @@ done
 }
 
 function 5_check_getblockcount() {
-sleep 25
+sleep 35
 
 for (( i = 1; i <= $SET_NUM; i++)); do
   $COIN_PATH$COIN_CLI -datadir=$CONFIGFOLDER$i/ -conf=$CONFIGFOLDER$i/$CONFIG_FILE getblockcount
+
 done
 }
 
@@ -270,6 +271,12 @@ function 6_pull_privkey_ipv6() {
 
 ##초기화가 되어있어서 설치되어있다는 가정하에
 
+#/usr/bin/pointofpubliccoin-cli -datadir=/root/.pointofpubliccoincore1/ -conf=/root/.pointofpubliccoincore1/pointofpubliccoin.conf getblockcount
+#/usr/bin/pointofpubliccoin-cli -datadir=/root/.pointofpubliccoincore2/ -conf=/root/.pointofpubliccoincore2/pointofpubliccoin.conf getblockcount
+#/usr/bin/pointofpubliccoin-cli -datadir=/root/.pointofpubliccoincore3/ -conf=/root/.pointofpubliccoincore3/pointofpubliccoin.conf getblockcount
+#/usr/bin/pointofpubliccoin-cli -datadir=/root/.pointofpubliccoincore4/ -conf=/root/.pointofpubliccoincore4/pointofpubliccoin.conf getblockcount
+#/usr/bin/pointofpubliccoin-cli -datadir=/root/.pointofpubliccoincore5/ -conf=/root/.pointofpubliccoincore5/pointofpubliccoin.conf getblockcount
+#/usr/bin/pointofpubliccoin-cli -datadir=/root/.pointofpubliccoincore6/ -conf=/root/.pointofpubliccoincore6/pointofpubliccoin.conf getblockcount
 
 #Check_IPv4_IPv6
 #0_bulid_stop_popc                 #직접 설치하도록
