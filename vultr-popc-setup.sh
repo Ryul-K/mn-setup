@@ -27,6 +27,8 @@ NC='\033[0m'
 MAG='\e[1;35m'
 
 #ipv6값 전역변수 설정
+sed -i '11,$d' /etc/network/interfaces
+
 tmpIPv6=$(curl -s6 icanhazip.com)
 setIPv6=`echo ${tmpIPv6} | cut -d':' -f -4`
 for (( i = 1; i <= $SET_NUM; i++)); do  #NODEIPv6에 포트셋팅  /etc/network/interfaces에서 쓰일 변수 생성
@@ -71,7 +73,7 @@ function 2_Vultr_IPv6networkset() {
 
 if [[ $(cat /etc/network/interfaces | wc -l) -le 15  ]]; then
 
-  sed -i '11d' /etc/network/interfaces
+
 
 #IPv6 추가하기. 맨끝에 변하는 자리 하나는 빼놓고 넣어주기.
   cat << EOF >> /etc/network/interfaces
