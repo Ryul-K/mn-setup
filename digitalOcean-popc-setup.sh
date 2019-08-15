@@ -230,7 +230,7 @@ sleep 3
 
 for (( i = 1; i <= $SET_NUM; i++)); do
 
-$COIN_PATH$COIN_DAEMON -datadir=$CONFIGFOLDER$i -conf=$CONFIGFOLDER$i/$CONFIG_FILE
+$COIN_PATH$COIN_DAEMON -datadir=$CONFIGFOLDER$i -conf=$CONFIGFOLDER$i/$CONFIG_FILE -daemon
 sleep 3
 done
 
