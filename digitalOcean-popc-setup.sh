@@ -223,7 +223,9 @@ function 4_popc_node_starting(){
 
 #if [[ ${check_ipv6_tmp} -eq 1 ]]; then
 sleep 5
-$COIN_PATH$COIN_DAEMON -datadir=$CONFIGFOLDER -conf=$CONFIGFOLDER/$CONFIG_FILE -reindex#reindex로 시작해야 하는지...
+
+/usr/bin/pointofpubliccoind -datadir=/root/.pointofpubliccoincore/ -conf=/root/.pointofpubliccoincore/pointofpubliccoin.conf -reindex
+#$COIN_PATH$COIN_DAEMON -datadir=$CONFIGFOLDER -conf=$CONFIGFOLDER/$CONFIG_FILE -reindex#reindex로 시작해야 하는지...
 #/usr/bin/pointofpubliccoind -datadir=/root/.pointofpubliccoincore/ -conf=/root/.pointofpubliccoincore/pointofpubliccoin.conf -reindex
 
 sleep 3
