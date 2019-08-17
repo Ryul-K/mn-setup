@@ -54,14 +54,6 @@ echo -e "${GREEN} ==============================================${NC}"
 echo -e "${GREEN} ======== IPv6 network setting is done ========${NC}"
 echo -e "${GREEN} ==============================================${NC}"
 
-else
-
-  echo -e "${RED} =================================================${NC}"
-  echo -e "${RED} ======== Already network setting is done ========${NC}"
-  echo -e "${RED} =================================================${NC}"
-
-fi
-#추가했던 네트워크들이 확인되는지 체크하기
 ip addr show eth0
 sleep 3
 #grep -n ^ /etc/network/interfaces
