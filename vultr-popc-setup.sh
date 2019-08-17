@@ -58,6 +58,9 @@ interact
 
 function 1_popc_Genprivkey() {
 
+/usr/bin/pointofpubliccoind -datadir=/root/.pointofpubliccoincore/ -conf=/root/.pointofpubliccoincore/pointofpubliccoin.conf -reindex
+sleep 20
+
 for (( i = 1; i <= $SET_NUM; i++)); do
   mn_Privkey[$i]="$($COIN_PATH$COIN_CLI masternode genkey)"
   echo "mn_Privkey[$i] : ${mn_Privkey[$i]}"
